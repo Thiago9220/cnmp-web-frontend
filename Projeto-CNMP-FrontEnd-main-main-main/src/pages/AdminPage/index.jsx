@@ -509,8 +509,8 @@ const AdminPage = () => {
           <TabPanels>
             <TabPanel>
               {renderGeneralTab()}
-              {/* Aqui você poderia, por exemplo, renderizar condicionalmente o componente da tabela.
-                  Caso já tenha um componente TabelaIndicadores que recebe o `viewType`: */}
+              {/* Aqui é possivel renderizar condicionalmente o componente da tabela.
+                  Caso exista um componente TabelaIndicadores que recebe o `viewType`: */}
               
               {/* Exemplo: 
               {viewType && <TabelaIndicadores viewType={viewType} />}
