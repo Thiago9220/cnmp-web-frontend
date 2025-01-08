@@ -8,37 +8,59 @@ export function useIndicadorData(viewType) {
   const [selectedIndicator, setSelectedIndicator] = useState('');
   const [meta, setMeta] = useState('0%');
 
+  // ==========================
   // Estados iniciais
+  // ==========================
+
+  // Mensal => 12 posições
   const initialStateMensal = {
     prescrito: Array(12).fill(''),
     finalizado: Array(12).fill(''),
     analiseMensal: Array(12).fill('')
   };
 
-  const initialStateSemestral = {
-    prescrito: Array(2).fill(''),
-    finalizado: Array(2).fill(''),
-    analiseSemestral: Array(2).fill('')
-  };
-
-  // Novo estado inicial para bimestral
+  // Bimestral => 6 posições
   const initialStateBimestral = {
     prescrito: Array(6).fill(''),
     finalizado: Array(6).fill(''),
     analiseBimestral: Array(6).fill('')
   };
 
+  // Trimestral => 4 posições
+  const initialStateTrimestral = {
+    prescrito: Array(4).fill(''),
+    finalizado: Array(4).fill(''),
+    analiseTrimestral: Array(4).fill('')
+  };
+
+  // Semestral => 2 posições
+  const initialStateSemestral = {
+    prescrito: Array(2).fill(''),
+    finalizado: Array(2).fill(''),
+    analiseSemestral: Array(2).fill('')
+  };
+
+  // ==========================
+  // Seleciona o estado inicial
+  // ==========================
   const initialState = 
     viewType === 'mensal' 
       ? initialStateMensal
-      : viewType === 'semestral'
-        ? initialStateSemestral
-        : initialStateBimestral; // Se for bimestral, usa o inicial bimestral
+      : viewType === 'bimestral'
+      ? initialStateBimestral
+      : viewType === 'trimestral'
+      ? initialStateTrimestral
+      : initialStateSemestral; // se for semestral ou default
 
+  // Armazena os dados do formulário (prescrito, finalizado, analiseMensal, etc.)
   const [formData, setFormData] = useState(initialState);
+
+  // Lista de indicadores carregada da API
   const [indicators, setIndicators] = useState([]);
 
+  // ==========================
   // Carrega indicadores da API
+  // ==========================
   useEffect(() => {
     fetch('http://localhost:8000/indicadores/')
       .then((response) => response.json())
@@ -55,15 +77,27 @@ export function useIndicadorData(viewType) {
       });
   }, [toast]);
 
-  // Carrega dados do localStorage de acordo com o tipo de visualização
+  // =================================================
+  // Carrega dados do localStorage de acordo com viewType
+  // =================================================
   useEffect(() => {
     let storageKey;
-    if (viewType === 'mensal') {
-      storageKey = 'formDataMensal';
-    } else if (viewType === 'semestral') {
-      storageKey = 'formDataSemestral';
-    } else {
-      storageKey = 'formDataBimestral';
+    switch (viewType) {
+      case 'mensal':
+        storageKey = 'formDataMensal';
+        break;
+      case 'bimestral':
+        storageKey = 'formDataBimestral';
+        break;
+      case 'trimestral':
+        storageKey = 'formDataTrimestral';
+        break;
+      case 'semestral':
+        storageKey = 'formDataSemestral';
+        break;
+      default:
+        storageKey = 'formDataMensal';
+        break;
     }
 
     const savedData = localStorage.getItem(storageKey);
@@ -80,6 +114,9 @@ export function useIndicadorData(viewType) {
     }
   }, [viewType]);
 
+  // ==============================
+  // Manipulador de mudanças de input
+  // ==============================
   const handleInputChange = (field, index, value) => {
     const sanitizedValue = value.replace(/[^0-9.,]/g, '');
     setFormData((prev) => ({
@@ -88,9 +125,16 @@ export function useIndicadorData(viewType) {
     }));
   };
 
-  // Cálculo do valorCalculado, adaptado para qualquer um dos tipos (mensal, bimestral, semestral)
+  // =================================
+  // Cálculo do valorCalculado (percent)
+  // =================================
   let valorCalculado = [];
-  if (formData && formData.prescrito && formData.finalizado && formData.prescrito.length === formData.finalizado.length) {
+  if (
+    formData &&
+    formData.prescrito &&
+    formData.finalizado &&
+    formData.prescrito.length === formData.finalizado.length
+  ) {
     valorCalculado = formData.prescrito.map((value, index) => {
       const prescrito = parseFloat((value || '').replace(',', '.')) || 0;
       const finalizado = parseFloat((formData.finalizado[index] || '').replace(',', '.')) || 0;
@@ -98,22 +142,44 @@ export function useIndicadorData(viewType) {
     });
   }
 
+  // ==========================
+  // Salvar dados no localStorage
+  // ==========================
   const salvarDados = () => {
     let storageKey;
-    if (viewType === 'mensal') {
-      storageKey = 'formDataMensal';
-    } else if (viewType === 'semestral') {
-      storageKey = 'formDataSemestral';
-    } else {
-      storageKey = 'formDataBimestral';
+    switch (viewType) {
+      case 'mensal':
+        storageKey = 'formDataMensal';
+        break;
+      case 'bimestral':
+        storageKey = 'formDataBimestral';
+        break;
+      case 'trimestral':
+        storageKey = 'formDataTrimestral';
+        break;
+      case 'semestral':
+        storageKey = 'formDataSemestral';
+        break;
+      default:
+        storageKey = 'formDataMensal';
+        break;
     }
 
     localStorage.setItem(
       storageKey,
       JSON.stringify({ selectedIndicator, meta, formData })
     );
+
     toast({
-      title: `Dados ${viewType === 'mensal' ? 'Mensais' : viewType === 'semestral' ? 'Semestrais' : 'Bimestrais'} salvos!`,
+      title: `Dados ${
+        viewType === 'mensal'
+          ? 'Mensais'
+          : viewType === 'bimestral'
+          ? 'Bimestrais'
+          : viewType === 'trimestral'
+          ? 'Trimestrais'
+          : 'Semestrais'
+      } salvos!`,
       description: `Suas informações foram armazenadas.`,
       status: 'success',
       duration: 3000,
@@ -121,6 +187,7 @@ export function useIndicadorData(viewType) {
     });
   };
 
+  // Retorna tudo o que for necessário nos componentes
   return {
     indicators,
     selectedIndicator,
