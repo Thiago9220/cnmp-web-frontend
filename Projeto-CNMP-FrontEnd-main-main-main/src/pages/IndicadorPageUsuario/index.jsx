@@ -12,16 +12,17 @@ import MonthlyTableView from '../../components/MonthlyTable/MonthlyTableView';
 import BimestralTableView from '../../components/BimestralTable/BimestralTableView';
 import TrimestralTableView from '../../components/TrimestralTable/TrimestralTableView';
 import SemestralTableView from '../../components/SemestralTable/SemestralTableView';
-
+// IMPORTANTE: importe também sua AnualTableView
+import AnualTableView from '../../components/AnualTable/AnualTableView';
 
 const IndicadoresPage = () => {
-  // Define qual visualização (mensal, bimestral, trimestral, semestral)
+  // Define qual visualização (mensal, bimestral, trimestral, semestral, anual)
   const [viewType, setViewType] = useState('mensal');
 
   // Data selecionada (mês ou ano, dependendo da visualização)
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  // Lógica de exibição/fechamento do modal
+  // Lógica de exibição/fechamento do modal do Chakra UI
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   // Notificações do Chakra
@@ -38,30 +39,30 @@ const IndicadoresPage = () => {
     setFormData,
     handleInputChange,    // lida com alterações de input
     valorCalculado,
-    salvarDados           // função para salvar no backend ou local
+    salvarDados           // função para salvar no localStorage (ou backend, caso adapte)
   } = useIndicadorData(viewType);
 
   // Define o modo do modal (visualizar/editar)
   const [modalMode, setModalMode] = useState('');
-  // Índice do mês, bimestre, trimestre ou semestre selecionado para edição/visualização
+  // Índice do mês, bimestre, trimestre, semestre ou mês-anual selecionado para edição/visualização
   const [selectedMonth, setSelectedMonth] = useState(null);
-  // Texto de análise (mensal, bimestral, trimestral ou semestral)
+  // Texto de análise (mensal, bimestral, trimestral, semestral ou anual)
   const [selectedMonthText, setSelectedMonthText] = useState('');
+
+  // Função auxiliar para decidir qual campo de análise usar
+  const getAnalysisField = () => {
+    if (viewType === 'mensal') return 'analiseMensal';
+    if (viewType === 'bimestral') return 'analiseBimestral';
+    if (viewType === 'trimestral') return 'analiseTrimestral';
+    if (viewType === 'semestral') return 'analiseSemestral';
+    // Se cair aqui, consideramos "anual"
+    return 'analiseAnual';
+  };
 
   // Ao abrir modal de Edição
   const openEditModal = (index) => {
     setSelectedMonth(index);
-
-    // Define o campo de análise correto conforme a visualização
-    const analysisField =
-      viewType === 'mensal'
-        ? 'analiseMensal'
-        : viewType === 'bimestral'
-        ? 'analiseBimestral'
-        : viewType === 'semestral'
-        ? 'analiseSemestral'
-        : 'analiseTrimestral';
-
+    const analysisField = getAnalysisField();
     setSelectedMonthText(formData[analysisField][index] || '');
     setModalMode('edit');
     onOpen();
@@ -70,16 +71,7 @@ const IndicadoresPage = () => {
   // Ao abrir modal de Visualização
   const openViewModal = (index) => {
     setSelectedMonth(index);
-
-    const analysisField =
-      viewType === 'mensal'
-        ? 'analiseMensal'
-        : viewType === 'bimestral'
-        ? 'analiseBimestral'
-        : viewType === 'semestral'
-        ? 'analiseSemestral'
-        : 'analiseTrimestral';
-
+    const analysisField = getAnalysisField();
     setSelectedMonthText(formData[analysisField][index] || '');
     setModalMode('view');
     onOpen();
@@ -87,14 +79,7 @@ const IndicadoresPage = () => {
 
   // Salvar a análise (chamado pelo modal)
   const saveAnalysis = () => {
-    const analysisField =
-      viewType === 'mensal'
-        ? 'analiseMensal'
-        : viewType === 'bimestral'
-        ? 'analiseBimestral'
-        : viewType === 'semestral'
-        ? 'analiseSemestral'
-        : 'analiseTrimestral';
+    const analysisField = getAnalysisField();
 
     setFormData((prev) => ({
       ...prev,
@@ -103,14 +88,16 @@ const IndicadoresPage = () => {
       ),
     }));
 
+    // Mensagem de sucesso
+    let periodoLabel;
+    if (viewType === 'mensal') periodoLabel = 'Mensal';
+    else if (viewType === 'bimestral') periodoLabel = 'Bimestral';
+    else if (viewType === 'trimestral') periodoLabel = 'Trimestral';
+    else if (viewType === 'semestral') periodoLabel = 'Semestral';
+    else periodoLabel = 'Anual';
+
     toast({
-      title: `Análise ${viewType === 'mensal' 
-        ? 'Mensal' 
-        : viewType === 'bimestral' 
-        ? 'Bimestral' 
-        : viewType === 'semestral' 
-        ? 'Semestral' 
-        : 'Trimestral'} salva!`,
+      title: `Análise ${periodoLabel} salva!`,
       description: 'O conteúdo foi atualizado.',
       status: 'success',
       duration: 3000,
@@ -132,7 +119,7 @@ const IndicadoresPage = () => {
             <DatePicker
               selected={selectedDate}
               onChange={(date) => setSelectedDate(date)}
-              // Exemplo: para bimestral, trimestral e semestral, podemos usar showYearPicker
+              // Se a view não for mensal, usamos showYearPicker (ex.: bimestral, trimestral, semestral, anual)
               showYearPicker={viewType !== 'mensal'}
               dateFormat={viewType === 'mensal' ? "MM/yyyy" : "yyyy"}
               customInput={
@@ -166,7 +153,7 @@ const IndicadoresPage = () => {
             ))}
           </Select>
 
-          {/* Select para escolher qual visualização (mensal, bimestral, trimestral, semestral) */}
+          {/* Select para escolher qual visualização (mensal, bimestral, trimestral, semestral, anual) */}
           <Select
             placeholder="Escolha a Visualização"
             value={viewType}
@@ -180,6 +167,7 @@ const IndicadoresPage = () => {
             <option value="bimestral">Bimestral</option>
             <option value="trimestral">Trimestral</option>
             <option value="semestral">Semestral</option>
+            <option value="anual">Anual</option> 
           </Select>
         </Box>
 
@@ -254,6 +242,29 @@ const IndicadoresPage = () => {
 
           {viewType === 'semestral' && (
             <SemestralTableView
+              selectedDate={selectedDate}
+              selectedIndicator={selectedIndicator}
+              meta={meta}
+              setMeta={setMeta}
+              formData={formData}
+              handleInputChange={handleInputChange}
+              valorCalculado={valorCalculado}
+              openEditModal={openEditModal}
+              openViewModal={openViewModal}
+              isOpen={isOpen}
+              onClose={onClose}
+              modalMode={modalMode}
+              selectedMonth={selectedMonth}
+              selectedMonthText={selectedMonthText}
+              setSelectedMonthText={setSelectedMonthText}
+              saveAnalysis={saveAnalysis}
+              salvarDados={salvarDados}
+            />
+          )}
+
+          {/* NOVA OPÇÃO: ANUAL */}
+          {viewType === 'anual' && (
+            <AnualTableView
               selectedDate={selectedDate}
               selectedIndicator={selectedIndicator}
               meta={meta}
