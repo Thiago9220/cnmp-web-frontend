@@ -459,11 +459,8 @@ const AdminPage = () => {
           <option value="mensal">Mensal</option>
           <option value="bimestral">Bimestral</option>
           <option value="trimestral">Trimestral</option>
-          <option value="quadrimestral">Quadrimestral</option>
           <option value="semestral">Semestral</option>
           <option value="anual">Anual</option>
-          <option value="bianual">Bianual</option>
-          <option value="trianual">Trianual</option>
         </Select>
       </FormGroup>
       <FormGroup label="Frequência da Meta">
@@ -476,11 +473,8 @@ const AdminPage = () => {
           <option value="mensal">Mensal</option>
           <option value="bimestral">Bimestral</option>
           <option value="trimestral">Trimestral</option>
-          <option value="quadrimestral">Quadrimestral</option>
           <option value="semestral">Semestral</option>
           <option value="anual">Anual</option>
-          <option value="bianual">Bianual</option>
-          <option value="trianual">Trianual</option>
         </Select>
       </FormGroup>
       <FormGroup label="Unidade de Medida">

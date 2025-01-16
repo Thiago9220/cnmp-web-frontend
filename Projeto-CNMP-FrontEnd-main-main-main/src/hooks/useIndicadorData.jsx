@@ -40,17 +40,26 @@ export function useIndicadorData(viewType) {
     analiseSemestral: Array(2).fill('')
   };
 
+  // Anual => 12 posições
+  const initialStateAnual = {
+    prescrito: Array(12).fill(''),
+    finalizado: Array(12).fill(''),
+    analiseAnual: Array(12).fill('')
+  };
+
   // ==========================
   // Seleciona o estado inicial
   // ==========================
   const initialState = 
-    viewType === 'mensal' 
+    viewType === 'mensal'
       ? initialStateMensal
       : viewType === 'bimestral'
       ? initialStateBimestral
       : viewType === 'trimestral'
       ? initialStateTrimestral
-      : initialStateSemestral; // se for semestral ou default
+      : viewType === 'semestral'
+      ? initialStateSemestral
+      : initialStateAnual; // se for "anual" ou não se encaixar nos demais
 
   // Armazena os dados do formulário (prescrito, finalizado, analiseMensal, etc.)
   const [formData, setFormData] = useState(initialState);
@@ -94,6 +103,9 @@ export function useIndicadorData(viewType) {
         break;
       case 'semestral':
         storageKey = 'formDataSemestral';
+        break;
+      case 'anual':
+        storageKey = 'formDataAnual';
         break;
       default:
         storageKey = 'formDataMensal';
@@ -160,6 +172,9 @@ export function useIndicadorData(viewType) {
       case 'semestral':
         storageKey = 'formDataSemestral';
         break;
+      case 'anual':
+        storageKey = 'formDataAnual';
+        break;
       default:
         storageKey = 'formDataMensal';
         break;
@@ -170,16 +185,31 @@ export function useIndicadorData(viewType) {
       JSON.stringify({ selectedIndicator, meta, formData })
     );
 
+    // Define o texto do toast dinamicamente
+    let periodoText;
+    switch (viewType) {
+      case 'mensal':
+        periodoText = 'Mensais';
+        break;
+      case 'bimestral':
+        periodoText = 'Bimestrais';
+        break;
+      case 'trimestral':
+        periodoText = 'Trimestrais';
+        break;
+      case 'semestral':
+        periodoText = 'Semestrais';
+        break;
+      case 'anual':
+        periodoText = 'Anuais';
+        break;
+      default:
+        periodoText = 'Mensais';
+        break;
+    }
+
     toast({
-      title: `Dados ${
-        viewType === 'mensal'
-          ? 'Mensais'
-          : viewType === 'bimestral'
-          ? 'Bimestrais'
-          : viewType === 'trimestral'
-          ? 'Trimestrais'
-          : 'Semestrais'
-      } salvos!`,
+      title: `Dados ${periodoText} salvos!`,
       description: `Suas informações foram armazenadas.`,
       status: 'success',
       duration: 3000,
