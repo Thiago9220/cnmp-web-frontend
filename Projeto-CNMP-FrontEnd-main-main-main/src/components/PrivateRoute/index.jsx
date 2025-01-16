@@ -17,7 +17,7 @@ const PrivateRoute = ({ children, allowedRoles }) => {
   }
 
   // Se o perfil do usuário não estiver incluído nos papéis permitidos, bloqueia o acesso
-  if (!allowedRoles.includes(userProfile)) {
+  if (!allowedRoles.includes(userProfile)) { 
     return <Navigate to="/medicoes" />; // Redireciona o usuário para a página de medição de indicadores
   }
 
