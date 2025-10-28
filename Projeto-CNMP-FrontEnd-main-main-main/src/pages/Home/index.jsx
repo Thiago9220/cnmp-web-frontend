@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Button, Heading, Text, VStack, HStack, Image } from '@chakra-ui/react';
-import logoImage from '../../assets/logo.png'; 
+import logoImage from '../../assets/logo.png';
 
 function HomePage() {
   const currentDate = new Date().toLocaleDateString('pt-BR', {
@@ -23,7 +23,7 @@ function HomePage() {
           <Heading as="h2" size="lg">Bem-vindo!</Heading>
           <Text fontSize="lg">Acesse os indicadores.</Text>
         </VStack>
-        
+
         <HStack className="cta" spacing={4} mt={8}>
           <Button bg="#9e3127" color="white" className="login-btn" onClick={() => window.location.href = '/login'}>
             Login

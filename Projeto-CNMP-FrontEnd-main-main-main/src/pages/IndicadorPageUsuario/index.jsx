@@ -4,31 +4,23 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { CalendarIcon } from '@chakra-ui/icons';
 
-// Hook de dados (ajuste conforme seu projeto)
 import { useIndicadorData } from '../../hooks/useIndicadorData';
 
-// Componentes de cada visualização
 import MonthlyTableView from '../../components/MonthlyTable/MonthlyTableView';
 import BimestralTableView from '../../components/BimestralTable/BimestralTableView';
 import TrimestralTableView from '../../components/TrimestralTable/TrimestralTableView';
 import SemestralTableView from '../../components/SemestralTable/SemestralTableView';
-// IMPORTANTE: importe também sua AnualTableView
 import AnualTableView from '../../components/AnualTable/AnualTableView';
 
 const IndicadoresPage = () => {
-  // Define qual visualização (mensal, bimestral, trimestral, semestral, anual)
   const [viewType, setViewType] = useState('mensal');
 
-  // Data selecionada (mês ou ano, dependendo da visualização)
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  // Lógica de exibição/fechamento do modal do Chakra UI
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  // Notificações do Chakra
   const toast = useToast();
 
-  // Hook personalizado para lidar com dados do indicador
   const {
     indicators,           // lista de indicadores disponíveis
     selectedIndicator,    // indicador escolhido
@@ -42,24 +34,18 @@ const IndicadoresPage = () => {
     salvarDados           // função para salvar no localStorage (ou backend, caso adapte)
   } = useIndicadorData(viewType);
 
-  // Define o modo do modal (visualizar/editar)
   const [modalMode, setModalMode] = useState('');
-  // Índice do mês, bimestre, trimestre, semestre ou mês-anual selecionado para edição/visualização
   const [selectedMonth, setSelectedMonth] = useState(null);
-  // Texto de análise (mensal, bimestral, trimestral, semestral ou anual)
   const [selectedMonthText, setSelectedMonthText] = useState('');
 
-  // Função auxiliar para decidir qual campo de análise usar
   const getAnalysisField = () => {
     if (viewType === 'mensal') return 'analiseMensal';
     if (viewType === 'bimestral') return 'analiseBimestral';
     if (viewType === 'trimestral') return 'analiseTrimestral';
     if (viewType === 'semestral') return 'analiseSemestral';
-    // Se cair aqui, consideramos "anual"
     return 'analiseAnual';
   };
 
-  // Ao abrir modal de Edição
   const openEditModal = (index) => {
     setSelectedMonth(index);
     const analysisField = getAnalysisField();
@@ -68,7 +54,6 @@ const IndicadoresPage = () => {
     onOpen();
   };
 
-  // Ao abrir modal de Visualização
   const openViewModal = (index) => {
     setSelectedMonth(index);
     const analysisField = getAnalysisField();
@@ -77,7 +62,6 @@ const IndicadoresPage = () => {
     onOpen();
   };
 
-  // Salvar a análise (chamado pelo modal)
   const saveAnalysis = () => {
     const analysisField = getAnalysisField();
 
@@ -88,7 +72,6 @@ const IndicadoresPage = () => {
       ),
     }));
 
-    // Mensagem de sucesso
     let periodoLabel;
     if (viewType === 'mensal') periodoLabel = 'Mensal';
     else if (viewType === 'bimestral') periodoLabel = 'Bimestral';
@@ -110,16 +93,15 @@ const IndicadoresPage = () => {
   return (
     <ChakraProvider>
       <Box padding="4" maxW="100%" margin="auto">
-        
-        {/* SELETOR DE DATA E INDICADOR */}
+
+
         <Box mb="4" textAlign="center">
 
-          {/* DatePicker para escolher mês/ano ou somente ano */}
+
           <Box mb="4">
             <DatePicker
               selected={selectedDate}
               onChange={(date) => setSelectedDate(date)}
-              // Se a view não for mensal, usamos showYearPicker (ex.: bimestral, trimestral, semestral, anual)
               showYearPicker={viewType !== 'mensal'}
               dateFormat={viewType === 'mensal' ? "MM/yyyy" : "yyyy"}
               customInput={
@@ -135,7 +117,7 @@ const IndicadoresPage = () => {
             />
           </Box>
 
-          {/* Select para escolher um indicador */}
+
           <Select
             placeholder="Escolha um indicador"
             value={selectedIndicator}
@@ -153,7 +135,7 @@ const IndicadoresPage = () => {
             ))}
           </Select>
 
-          {/* Select para escolher qual visualização (mensal, bimestral, trimestral, semestral, anual) */}
+
           <Select
             placeholder="Escolha a Visualização"
             value={viewType}
@@ -167,13 +149,13 @@ const IndicadoresPage = () => {
             <option value="bimestral">Bimestral</option>
             <option value="trimestral">Trimestral</option>
             <option value="semestral">Semestral</option>
-            <option value="anual">Anual</option> 
+            <option value="anual">Anual</option>
           </Select>
         </Box>
 
-        {/* TABELAS (renderizadas condicionalmente) */}
+
         <Box overflowX="auto">
-          
+
           {viewType === 'mensal' && (
             <MonthlyTableView
               selectedDate={selectedDate}
@@ -262,7 +244,7 @@ const IndicadoresPage = () => {
             />
           )}
 
-          {/* NOVA OPÇÃO: ANUAL */}
+
           {viewType === 'anual' && (
             <AnualTableView
               selectedDate={selectedDate}

@@ -1,4 +1,3 @@
-// TrimestralTableView.jsx
 import React from 'react';
 import { Table, Thead, Tbody, Tr, Th, Box, Button, Heading } from '@chakra-ui/react';
 import TrimestralTableRow from './TrimestralTableRow';
@@ -6,7 +5,6 @@ import AnalysisModal from '../AnalysisModal';
 
 const trimestres = ['1º Trimestre', '2º Trimestre', '3º Trimestre', '4º Trimestre'];
 
-// Para saber em qual trimestre estamos, podemos usar:
 const currentTrimester = Math.floor(new Date().getMonth() / 3);
 
 const TrimestralTableView = ({
@@ -28,9 +26,6 @@ const TrimestralTableView = ({
   saveAnalysis,
   salvarDados
 }) => {
-  // Verificação se formData está pronto para trimestral
-  // Precisamos de 4 posições em cada array do formData (0,1,2,3).
-  // Ex.: formData.prescrito.length === 4, formData.analiseTrimestral.length === 4, etc.
   if (
     !formData ||
     !formData.prescrito ||
@@ -59,7 +54,7 @@ const TrimestralTableView = ({
           </Tr>
         </Thead>
         <Tbody>
-          {/* Exemplo de linha 'prescrito' */}
+
           <TrimestralTableRow
             label="Número Prescrito"
             type="prescrito"
@@ -75,7 +70,7 @@ const TrimestralTableView = ({
             currentTrimester={currentTrimester}
           />
 
-          {/* Exemplo de linha 'finalizado' */}
+
           <TrimestralTableRow
             label="Número Finalizado"
             type="finalizado"
@@ -88,7 +83,7 @@ const TrimestralTableView = ({
             currentTrimester={currentTrimester}
           />
 
-          {/* Exemplo de linha 'calculado' */}
+
           <TrimestralTableRow
             label="Valor Calculado"
             type="calculado"
@@ -98,7 +93,7 @@ const TrimestralTableView = ({
             currentTrimester={currentTrimester}
           />
 
-          {/* Exemplo de linha 'analise' */}
+
           <TrimestralTableRow
             label="Análise Trimestral"
             type="analise"
@@ -120,7 +115,6 @@ const TrimestralTableView = ({
       <AnalysisModal
         isOpen={isOpen}
         onClose={onClose}
-        // Aqui, utilize o array 'trimestres' e o índice selectedMonth:
         selectedMonth={trimestres[selectedMonth]}
         selectedMonthText={selectedMonthText}
         setSelectedMonthText={setSelectedMonthText}

@@ -4,17 +4,14 @@ import BimestralTableRow from './BimestralTableRow';
 import AnalysisModal from '../AnalysisModal';
 
 const bimestres = [
-  '1º Bimestre', 
-  '2º Bimestre', 
-  '3º Bimestre', 
-  '4º Bimestre', 
-  '5º Bimestre', 
+  '1º Bimestre',
+  '2º Bimestre',
+  '3º Bimestre',
+  '4º Bimestre',
+  '5º Bimestre',
   '6º Bimestre'
 ];
 
-// Cálculo do bimestre atual com base no mês atual (0 = janeiro)
-// Cada bimestre corresponde a 2 meses: 
-// jan-fev(0), mar-abr(1), mai-jun(2), jul-ago(3), set-out(4), nov-dez(5)
 const currentBimestre = Math.floor(new Date().getMonth() / 2);
 
 const BimestralTableView = ({
@@ -36,9 +33,6 @@ const BimestralTableView = ({
   saveAnalysis,
   salvarDados
 }) => {
-  // Verificação se formData está pronto para bimestral
-  // Esperamos que formData tenha arrays como formData.prescrito, formData.finalizado, 
-  // formData.analiseBimestral, cada um com length = 6
   if (
     !formData ||
     !formData.prescrito ||

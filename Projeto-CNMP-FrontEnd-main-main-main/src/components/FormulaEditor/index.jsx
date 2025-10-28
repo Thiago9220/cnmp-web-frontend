@@ -19,13 +19,11 @@ import {
   Flex,
 } from '@chakra-ui/react';
 
-// Importar o MathQuill, KaTeX e os estilos necessários
 import 'mathquill/build/mathquill.css';
 import { addStyles, EditableMathField } from 'react-mathquill';
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
 
-// Adicionar estilos do MathQuill
 addStyles();
 
 const FormulaEditor = ({
@@ -35,12 +33,10 @@ const FormulaEditor = ({
   initialFormula,
   componentes,
 }) => {
-  // Estado para a fórmula em LaTeX
   const [latexFormula, setLatexFormula] = useState(initialFormula || '');
   const [mathField, setMathField] = useState(null);
   const toast = useToast();
 
-  // Array de operadores
   const operators = [
     { symbol: '+', label: '+' },
     { symbol: '-', label: '-' },
@@ -64,7 +60,6 @@ const FormulaEditor = ({
     { symbol: ')', label: ')' },
   ];
 
-  // Função para inserir símbolos no MathField
   const insertSymbol = (symbol) => {
     if (mathField) {
       mathField.write(symbol);
@@ -73,7 +68,6 @@ const FormulaEditor = ({
     }
   };
 
-  // Validação de entrada para fórmulas
   const validateFormula = () => {
     try {
       katex.renderToString(latexFormula, { throwOnError: true });
@@ -91,7 +85,6 @@ const FormulaEditor = ({
     }
   };
 
-  // Função para salvar a fórmula
   const saveFormula = () => {
     if (validateFormula()) {
       onSave(latexFormula);
@@ -99,7 +92,6 @@ const FormulaEditor = ({
     }
   };
 
-  // Atalhos de teclado
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (mathField) {
@@ -140,7 +132,7 @@ const FormulaEditor = ({
         <ModalCloseButton />
         <ModalBody>
           <Flex>
-            {/* Lado esquerdo: Componentes */}
+
             <Box width="30%" pr={4} maxHeight="400px" overflowY="auto">
               <VStack align="stretch" spacing={2}>
                 {componentes.map((component, index) => (
@@ -155,9 +147,9 @@ const FormulaEditor = ({
                 ))}
               </VStack>
             </Box>
-            {/* Lado direito: Operadores no topo, campo de texto e pré-visualização abaixo */}
+
             <Box width="70%">
-              {/* Operadores */}
+
               <Wrap spacing={2} mb={4}>
                 {operators.map((item, index) => (
                   <WrapItem key={index}>
@@ -167,7 +159,7 @@ const FormulaEditor = ({
                   </WrapItem>
                 ))}
               </Wrap>
-              {/* Campo do MathField */}
+
               <Box>
                 <EditableMathField
                   latex={latexFormula}
@@ -186,7 +178,7 @@ const FormulaEditor = ({
                   }}
                 />
               </Box>
-              {/* Pré-visualização */}
+
               <Box mt={4}>
                 <Text fontWeight="bold">Pré-visualização:</Text>
                 <Box

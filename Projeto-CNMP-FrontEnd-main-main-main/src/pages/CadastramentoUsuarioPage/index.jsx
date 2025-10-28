@@ -28,7 +28,6 @@ function CadastramentoUsuarioPage() {
   const [password, setPassword] = useState(''); // Armazena a senha gerada
   const [isSubmitting, setIsSubmitting] = useState(false); // Estado de carregamento
 
-  // Função para gerar senha aleatória mais forte
   const generatePassword = () => {
     const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const lower = 'abcdefghijklmnopqrstuvwxyz';
@@ -57,7 +56,6 @@ function CadastramentoUsuarioPage() {
     e.preventDefault();
     setIsSubmitting(true); // Ativa o estado de carregamento
 
-    // Gerar a senha automaticamente
     const generatedPassword = generatePassword();
     setPassword(generatedPassword);
 
@@ -70,7 +68,6 @@ function CadastramentoUsuarioPage() {
       senha: generatedPassword // Enviar a senha gerada automaticamente
     };
 
-    // Valida se todos os campos obrigatórios foram preenchidos
     if (!formData.nome || !formData.email || !formData.areaResponsavel || !formData.perfil) {
       toast({
         title: 'Erro',
@@ -84,7 +81,6 @@ function CadastramentoUsuarioPage() {
     }
 
     try {
-      // Fazer a requisição ao backend para registrar o usuário
       const response = await fetch('http://localhost:8000/usuarios/', {
         method: 'POST',
         headers: {
@@ -102,7 +98,6 @@ function CadastramentoUsuarioPage() {
           isClosable: true,
         });
 
-        // Exibir modal com a senha gerada
         setIsPasswordModalOpen(true);
       } else {
         const errorData = await response.json();
@@ -212,7 +207,7 @@ function CadastramentoUsuarioPage() {
         </form>
       </Box>
 
-      {/* Modal de Senha Gerada */}
+
       <Modal isOpen={isPasswordModalOpen} onClose={handleCloseModal}>
         <ModalOverlay />
         <ModalContent>
@@ -233,4 +228,3 @@ function CadastramentoUsuarioPage() {
 }
 
 export default CadastramentoUsuarioPage;
-

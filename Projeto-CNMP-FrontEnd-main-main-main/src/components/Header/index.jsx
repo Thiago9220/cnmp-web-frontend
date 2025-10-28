@@ -36,21 +36,15 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useToast } from "@chakra-ui/react";
 
-// Importando o componente de ajuda
 import HelpForm from "../helpform";
 
-// Importando imagens (ajuste paths se necessário)
 import cnmpffImage from "../../assets/cnmpff.png";
 import logoImage from "../../assets/logo.png";
 
-// -----------------------------------------------------------------------------
-// NavItem
-// -----------------------------------------------------------------------------
 const NavItem = ({ icon, route, isActive, children, ...rest }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    // Navega para a rota recebida como prop
     navigate(route);
   };
 
@@ -93,14 +87,10 @@ const NavItem = ({ icon, route, isActive, children, ...rest }) => {
   );
 };
 
-// -----------------------------------------------------------------------------
-// SidebarContent
-// -----------------------------------------------------------------------------
 const SidebarContent = ({ onClose, isNormalUser, onOpenHelpForm, ...rest }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Definição das rotas
   const LinkItems = isNormalUser
     ? [{ name: "Medições de indicador", icon: FiTrendingUp, route: "/medicoes" }]
     : [
@@ -137,14 +127,13 @@ const SidebarContent = ({ onClose, isNormalUser, onOpenHelpForm, ...rest }) => {
           key={link.name}
           icon={link.icon}
           route={link.route}
-          // Marca como ativo se a rota atual bater com a route
           isActive={location.pathname === link.route}
         >
           {link.name}
         </NavItem>
       ))}
 
-      {/* Botão para abrir o modal de ajuda */}
+
       <Box position="absolute" bottom="8" w="full" px="4">
         <Button
           onClick={onOpenHelpForm}
@@ -160,9 +149,6 @@ const SidebarContent = ({ onClose, isNormalUser, onOpenHelpForm, ...rest }) => {
   );
 };
 
-// -----------------------------------------------------------------------------
-// MobileNav
-// -----------------------------------------------------------------------------
 const MobileNav = ({ onOpen, isNormalUser, onOpenEditProfile, profileImage, ...rest }) => {
   const navigate = useNavigate();
   const [nomeUsuario, setNomeUsuario] = useState("");
@@ -254,9 +240,6 @@ const MobileNav = ({ onOpen, isNormalUser, onOpenEditProfile, profileImage, ...r
   );
 };
 
-// -----------------------------------------------------------------------------
-// SidebarWithHeader (componente principal)
-// -----------------------------------------------------------------------------
 const SidebarWithHeader = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -283,7 +266,6 @@ const SidebarWithHeader = ({ children }) => {
   const toast = useToast();
   const token = localStorage.getItem("token");
 
-  // Carrega dados iniciais
   useEffect(() => {
     const perfilUsuario = localStorage.getItem("perfilUsuario");
     setIsNormalUser(perfilUsuario === "usuario");
@@ -301,7 +283,7 @@ const SidebarWithHeader = ({ children }) => {
 
   return (
     <Box minH="100vh" bg={useColorModeValue("white", "gray.900")}>
-      {/* SIDEBAR - DESKTOP */}
+
       <SidebarContent
         onClose={onClose}
         isNormalUser={isNormalUser}
@@ -309,7 +291,7 @@ const SidebarWithHeader = ({ children }) => {
         display={{ base: "none", md: "block" }}
       />
 
-      {/* SIDEBAR - MOBILE (Drawer) */}
+
       <Drawer
         isOpen={isOpen}
         placement="left"
@@ -327,7 +309,7 @@ const SidebarWithHeader = ({ children }) => {
         </DrawerContent>
       </Drawer>
 
-      {/* TOPO (NAVBAR) */}
+
       <MobileNav
         onOpen={onOpen}
         isNormalUser={isNormalUser}
@@ -335,32 +317,15 @@ const SidebarWithHeader = ({ children }) => {
         profileImage={profileImagePreview}
       />
 
-      {/* CONTEÚDO PRINCIPAL */}
+
       <Box ml={{ base: 0, md: 60 }} p="4">
         {children}
       </Box>
 
-      {/* MODAL DE AJUDA */}
+
       <HelpForm isOpen={isHelpFormOpen} onClose={onCloseHelpForm} />
 
-      {/*
-        Se você desejar criar um modal de editar perfil, pode fazê-lo aqui.
-        Exemplo rápido (descomente se necessário):
-        
-        <Modal isOpen={isEditProfileOpen} onClose={onCloseEditProfile}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Editar Perfil</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              // Coloque os campos para edição de perfil
-            </ModalBody>
-            <ModalFooter>
-              <Button onClick={onCloseEditProfile}>Fechar</Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-      */}
+
     </Box>
   );
 };

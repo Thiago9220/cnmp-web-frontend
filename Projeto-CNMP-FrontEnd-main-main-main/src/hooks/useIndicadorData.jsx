@@ -4,53 +4,41 @@ import { useToast } from '@chakra-ui/react';
 export function useIndicadorData(viewType) {
   const toast = useToast();
 
-  // Indicador selecionado e meta
   const [selectedIndicator, setSelectedIndicator] = useState('');
   const [meta, setMeta] = useState('0%');
 
-  // ==========================
-  // Estados iniciais
-  // ==========================
 
-  // Mensal => 12 posições
   const initialStateMensal = {
     prescrito: Array(12).fill(''),
     finalizado: Array(12).fill(''),
     analiseMensal: Array(12).fill('')
   };
 
-  // Bimestral => 6 posições
   const initialStateBimestral = {
     prescrito: Array(6).fill(''),
     finalizado: Array(6).fill(''),
     analiseBimestral: Array(6).fill('')
   };
 
-  // Trimestral => 4 posições
   const initialStateTrimestral = {
     prescrito: Array(4).fill(''),
     finalizado: Array(4).fill(''),
     analiseTrimestral: Array(4).fill('')
   };
 
-  // Semestral => 2 posições
   const initialStateSemestral = {
     prescrito: Array(2).fill(''),
     finalizado: Array(2).fill(''),
     analiseSemestral: Array(2).fill('')
   };
 
-  // Anual => 12 posições
   const initialStateAnual = {
     prescrito: Array(12).fill(''),
     finalizado: Array(12).fill(''),
     analiseAnual: Array(12).fill('')
   };
 
-  // ==========================
-  // Seleciona o estado inicial
-  // ==========================
-  const initialState = 
+  const initialState =
     viewType === 'mensal'
       ? initialStateMensal
       : viewType === 'bimestral'
@@ -61,15 +49,10 @@ export function useIndicadorData(viewType) {
       ? initialStateSemestral
       : initialStateAnual; // se for "anual" ou não se encaixar nos demais
 
-  // Armazena os dados do formulário (prescrito, finalizado, analiseMensal, etc.)
   const [formData, setFormData] = useState(initialState);
 
-  // Lista de indicadores carregada da API
   const [indicators, setIndicators] = useState([]);
 
-  // ==========================
-  // Carrega indicadores da API
-  // ==========================
   useEffect(() => {
     fetch('http://localhost:8000/indicadores/')
       .then((response) => response.json())
@@ -86,9 +69,6 @@ export function useIndicadorData(viewType) {
       });
   }, [toast]);
 
-  // =================================================
-  // Carrega dados do localStorage de acordo com viewType
-  // =================================================
   useEffect(() => {
     let storageKey;
     switch (viewType) {
@@ -119,16 +99,12 @@ export function useIndicadorData(viewType) {
       setSelectedIndicator(parsedData.selectedIndicator || '');
       setMeta(parsedData.meta || '0%');
     } else {
-      // Se não houver dados salvos, reinicia com o estado inicial
       setFormData(initialState);
       setSelectedIndicator('');
       setMeta('0%');
     }
   }, [viewType]);
 
-  // ==============================
-  // Manipulador de mudanças de input
-  // ==============================
   const handleInputChange = (field, index, value) => {
     const sanitizedValue = value.replace(/[^0-9.,]/g, '');
     setFormData((prev) => ({
@@ -137,9 +113,6 @@ export function useIndicadorData(viewType) {
     }));
   };
 
-  // =================================
-  // Cálculo do valorCalculado (percent)
-  // =================================
   let valorCalculado = [];
   if (
     formData &&
@@ -154,9 +127,6 @@ export function useIndicadorData(viewType) {
     });
   }
 
-  // ==========================
-  // Salvar dados no localStorage
-  // ==========================
   const salvarDados = () => {
     let storageKey;
     switch (viewType) {
@@ -185,7 +155,6 @@ export function useIndicadorData(viewType) {
       JSON.stringify({ selectedIndicator, meta, formData })
     );
 
-    // Define o texto do toast dinamicamente
     let periodoText;
     switch (viewType) {
       case 'mensal':
@@ -217,7 +186,6 @@ export function useIndicadorData(viewType) {
     });
   };
 
-  // Retorna tudo o que for necessário nos componentes
   return {
     indicators,
     selectedIndicator,

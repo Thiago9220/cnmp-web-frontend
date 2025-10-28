@@ -36,8 +36,6 @@ const AnualTableView = ({
   saveAnalysis,
   salvarDados,
 }) => {
-  // Validamos se formData existe e possui as chaves necessárias.
-  // Aqui assumimos que cada array tem ao menos 1 elemento (índice 0).
   if (
     !formData ||
     !formData.prescrito ||
@@ -47,14 +45,11 @@ const AnualTableView = ({
     return <p>Carregando dados anuais...</p>;
   }
 
-  // Como "anual" é só 1 valor para o ano,
-  // usaremos sempre o índice 0 para ler/escrever.
   const index = 0;
 
   const prescritoValue = formData.prescrito[index] || '';
   const finalizadoValue = formData.finalizado[index] || '';
   const analiseValue = formData.analiseAnual[index] || '';
-  // Caso você tenha calculado a % também para index 0
   const calculadoPercent = valorCalculado?.[index] || 0;
 
   return (
@@ -78,12 +73,9 @@ const AnualTableView = ({
         </Thead>
 
         <Tbody>
-          {/* 
-            PRIMEIRA LINHA => PRESCRITO 
-            Vamos usar rowSpan="4" para "Indicador"
-          */}
+
           <Tr>
-            {/* Coluna do Indicador (aparece só na primeira linha, mas abrange 4 linhas) */}
+
             <Td
               rowSpan={4}
               p="1"
@@ -95,7 +87,7 @@ const AnualTableView = ({
               {selectedIndicator || 'Selecione um Indicador'}
             </Td>
 
-            {/* Coluna "Valores" => label do que estamos pedindo */}
+
             <Td
               p="1"
               textAlign="left"
@@ -106,7 +98,7 @@ const AnualTableView = ({
               Número de PAD prescritos
             </Td>
 
-            {/* Coluna de valor do ano */}
+
             <Td
               p="1"
               textAlign="center"
@@ -123,7 +115,7 @@ const AnualTableView = ({
               />
             </Td>
 
-            {/* Coluna da Meta (apenas uma para todas as 4 linhas => rowSpan="4") */}
+
             <Td
               rowSpan={4}
               p="1"
@@ -142,7 +134,7 @@ const AnualTableView = ({
             </Td>
           </Tr>
 
-          {/* SEGUNDA LINHA => FINALIZADO */}
+
           <Tr>
             <Td
               p="1"
@@ -171,7 +163,7 @@ const AnualTableView = ({
             </Td>
           </Tr>
 
-          {/* TERCEIRA LINHA => VALOR CALCULADO */}
+
           <Tr>
             <Td
               p="1"
@@ -189,14 +181,14 @@ const AnualTableView = ({
               border="1px solid"
               borderColor="gray.300"
             >
-              {/* Exemplo: exibir "xx.xx%" */}
+
               <Text fontWeight="medium">
                 {calculadoPercent.toFixed(2)}%
               </Text>
             </Td>
           </Tr>
 
-          {/* QUARTA LINHA => ANÁLISE ANUAL */}
+
           <Tr>
             <Td
               p="1"
@@ -219,7 +211,6 @@ const AnualTableView = ({
                   size="xs"
                   icon={<EditIcon />}
                   aria-label="Editar Análise"
-                  // Index sempre 0, pois é anual
                   onClick={() => openEditModal(0)}
                 />
                 <IconButton
@@ -241,11 +232,10 @@ const AnualTableView = ({
         </Button>
       </Box>
 
-      {/* Modal para exibir/editar a análise */}
+
       <AnalysisModal
         isOpen={isOpen}
         onClose={onClose}
-        // Como estamos sempre usando index=0, assumimos que 'selectedMonth' = 0
         selectedMonthText={selectedMonthText}
         setSelectedMonthText={setSelectedMonthText}
         modalMode={modalMode}

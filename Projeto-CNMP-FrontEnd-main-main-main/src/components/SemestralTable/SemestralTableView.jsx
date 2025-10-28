@@ -26,7 +26,6 @@ const SemestralTableView = ({
   salvarDados
 }) => {
 
-  // Verificação se formData está pronto para semestral
   if (!formData || !formData.prescrito || formData.prescrito.length !== 2) {
     return <p>Carregando dados semestrais...</p>;
   }

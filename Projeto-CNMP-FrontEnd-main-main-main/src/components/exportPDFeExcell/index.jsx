@@ -17,7 +17,6 @@ export const exportarSelecionadosParaPDF = (selectedIndicators, indicadores, toa
 
   const doc = new jsPDF();
 
-  // Obter os dados dos indicadores selecionados
   const dados = indicadores.filter((item) => selectedIndicators.includes(item.codigo));
 
   dados.forEach((item, index) => {
@@ -103,6 +102,3 @@ export const exportarSelecionadosParaExcel = (selectedIndicators, indicadores, t
   const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
   saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'indicadores_selecionados.xlsx');
 };
-
-
-

@@ -30,7 +30,6 @@ export default function LoginScreen() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // Verifica se os campos de email e senha estão preenchidos
     if (!email || !password) {
       setErrorMessage('Por favor, preencha ambos os campos.');
       return;
@@ -42,15 +41,12 @@ export default function LoginScreen() {
         senha: password,  // Certifique-se de que o campo seja "senha" para corresponder ao backend
       });
 
-      // Certifique-se de que o backend está retornando o perfil do usuário corretamente
       const { access_token, nome, perfil } = response.data;
 
-      // Armazena o token, nome e perfil no localStorage
       localStorage.setItem('token', access_token);
       localStorage.setItem('nomeUsuario', nome);
       localStorage.setItem('perfilUsuario', perfil); // Armazena o perfil do usuário corretamente
 
-      // Redireciona para a página inicial logada
       navigate('/HomePageLogada');
     } catch (error) {
       if (error.response && error.response.status === 400) {
@@ -67,7 +63,7 @@ export default function LoginScreen() {
         <Stack spacing={4} w={'full'} maxW={'md'} as="form" onSubmit={handleLogin}>
           <Heading fontSize={'4xl'} color="gray.700">Entrar na sua conta</Heading>
           <FormControl id="email">
-            <FormLabel>Email</FormLabel> {/* Melhor especificar o label como 'Email' */}
+            <FormLabel>Email</FormLabel>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
                 <FaUser color="gray.300" />
@@ -119,4 +115,3 @@ export default function LoginScreen() {
     </Stack>
   );
 }
-

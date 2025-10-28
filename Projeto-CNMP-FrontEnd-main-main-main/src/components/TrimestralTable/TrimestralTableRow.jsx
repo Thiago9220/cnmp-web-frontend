@@ -1,4 +1,3 @@
-// TrimestralTableRow.jsx
 import React from 'react';
 import { Tr, Td, Text, Tooltip, Input, IconButton, Stack } from '@chakra-ui/react';
 import { InfoIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
@@ -32,7 +31,7 @@ const TrimestralTableRow = ({
       </Td>
     )}
 
-    {/* Coluna com Tooltip e label */}
+
     <Td p="1" textAlign="left" border="1px solid" borderColor="gray.300">
       <Tooltip label={`Informações sobre ${label}`} aria-label="Tooltip">
         <Text>
@@ -42,7 +41,7 @@ const TrimestralTableRow = ({
       </Tooltip>
     </Td>
 
-    {/* Renderiza os 4 trimestres */}
+
     {trimestres.map((trim, index) => (
       <Td
         key={`${type}-${index}`}

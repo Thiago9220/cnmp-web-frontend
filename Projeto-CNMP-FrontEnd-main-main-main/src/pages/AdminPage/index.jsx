@@ -1,4 +1,3 @@
-// src/pages/AdminPage/index.jsx
 
 import React, { useState, useEffect } from 'react';
 import {
@@ -32,7 +31,6 @@ const FormGroup = ({ label, children }) => (
 const AdminPage = () => {
   const toast = useToast();
 
-  // Estado principal do formulário
   const [formData, setFormData] = useState({
     codigoIndicador: '',
     nomeIndicador: '',
@@ -57,15 +55,11 @@ const AdminPage = () => {
     componentes: [],
   });
 
-  // Estados para edição de componentes
   const [editingComponents, setEditingComponents] = useState([]);
   const [componentOriginalValues, setComponentOriginalValues] = useState([]);
 
-  // Estado para modal de fórmula
   const [isFormulaModalOpen, setIsFormulaModalOpen] = useState(false);
 
-  // Estado para controlar qual tipo de visualização (viewType) será usado na tabela
-  // Pode ser 'mensal', 'semestral', 'bimestral', etc.
   const [viewType, setViewType] = useState('');
 
   const openFormulaModal = () => setIsFormulaModalOpen(true);
@@ -76,7 +70,6 @@ const AdminPage = () => {
     closeFormulaModal();
   };
 
-  // Ao mudar qualquer campo do formulário
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -89,18 +82,13 @@ const AdminPage = () => {
     } else {
       setFormData({ ...formData, [name]: value });
 
-      // Se mudar a periodicidade de coleta, atualizamos o viewType
       if (name === 'periodicidadeColeta') {
         atualizarViewType(value);
       }
     }
   };
 
-  // Função para definir o viewType com base na periodicidade selecionada
   const atualizarViewType = (periodicidade) => {
-    // Aqui você pode criar uma lógica de mapeamento.
-    // Exemplo simples: o valor do combo é o mesmo da viewType
-    // Mas você pode criar um switch se quiser algo mais customizado.
     switch (periodicidade) {
       case 'mensal':
         setViewType('mensal');
@@ -503,15 +491,11 @@ const AdminPage = () => {
           <TabPanels>
             <TabPanel>
               {renderGeneralTab()}
-              {/* Aqui é possivel renderizar condicionalmente o componente da tabela.
-                  Caso exista um componente TabelaIndicadores que recebe o `viewType`: */}
-              
-              {/* Exemplo: 
-              {viewType && <TabelaIndicadores viewType={viewType} />}
-              */}
 
-              {/* Dessa forma, ao mudar a periodicidadeColeta, 
-                  o viewType é atualizado e a tabela correspondente é exibida. */}
+
+
+
+
             </TabPanel>
           </TabPanels>
         </ChakraTabs>

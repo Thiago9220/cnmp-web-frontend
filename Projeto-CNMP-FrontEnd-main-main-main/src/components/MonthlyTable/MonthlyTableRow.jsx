@@ -17,7 +17,7 @@ const MonthlyTableRow = ({
 }) => {
   return (
     <Tr>
-      {/* Coluna do Indicador aparece apenas para a primeira linha (type === 'prescrito') */}
+
       {type === 'prescrito' && (
         <Td
           rowSpan="4"
@@ -32,7 +32,7 @@ const MonthlyTableRow = ({
         </Td>
       )}
 
-      {/* Coluna com o label (ex.: "Número de PAD prescritos") */}
+
       <Td p="1" textAlign="left" border="1px solid" borderColor="gray.300">
         <Tooltip label={`Informações sobre ${label}`} aria-label="Tooltip">
           <Text>
@@ -42,7 +42,7 @@ const MonthlyTableRow = ({
         </Tooltip>
       </Td>
 
-      {/* Colunas referentes aos 12 meses */}
+
       {months.map((month, index) => (
         <Td
           key={`${type}-${index}`}
@@ -54,7 +54,6 @@ const MonthlyTableRow = ({
           fontWeight={index === currentMonth ? 'medium' : 'normal'}
         >
           {type === 'calculado' ? (
-            // Exibe a % calculada. Precisamos acessar com segurança:
             <Text>
               {valorCalculado && valorCalculado[index] != null
                 ? valorCalculado[index].toFixed(2) + '%'
@@ -68,7 +67,6 @@ const MonthlyTableRow = ({
                 icon={<EditIcon />}
                 aria-label="Editar Análise"
                 onClick={() => openEditModal(index)}
-                // Ajuste se deseja permitir edição retroativa ou não
                 isDisabled={index >= currentMonth}
               />
               <IconButton
@@ -76,18 +74,14 @@ const MonthlyTableRow = ({
                 icon={<ViewIcon />}
                 aria-label="Visualizar Análise"
                 onClick={() => openViewModal(index)}
-                // Só habilita se houver texto em analiseMensal[index]
                 isDisabled={!formData.analiseMensal || !formData.analiseMensal[index]}
               />
             </Stack>
           ) : (
-            // Prescrito ou Finalizado
             <Input
               size="sm"
               variant="outline"
               textAlign="center"
-              // Acesso seguro: caso formData[type] não exista, pode gerar erro. 
-              // Mas se você garantiu no TableView que formData[type] é array[12], já está ok.
               value={formData[type] ? formData[type][index] : ''}
               onChange={(e) => handleInputChange(type, index, e.target.value)}
               placeholder="0,00"
@@ -97,7 +91,7 @@ const MonthlyTableRow = ({
         </Td>
       ))}
 
-      {/* Coluna de Meta aparece na primeira linha (type === 'prescrito') unindo as 4 linhas. */}
+
       {type === 'prescrito' && (
         <Td
           rowSpan="4"

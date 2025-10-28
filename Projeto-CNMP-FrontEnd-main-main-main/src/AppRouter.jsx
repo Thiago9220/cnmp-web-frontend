@@ -8,7 +8,7 @@ import HomePageLogada from './pages/HomePageLogada';
 import AdminPage from './pages/AdminPage/index';
 import CadastramentoUsuarioPage from './pages/CadastramentoUsuarioPage';
 import EditarPerfil from './pages/Perfil';
-import MedicoesPage from './pages/Medicoes'; 
+import MedicoesPage from './pages/Medicoes';
 
 
 export const AppRouter = () => {
@@ -17,18 +17,18 @@ export const AppRouter = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        
+
         <Route element={<PrivateRoute />}>
           <Route path="/home" element={<Home />} />
           <Route path="/medicoes" element={<MedicoesPage />} />
         </Route>
-        
+
         <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/HomePageLogada" element={<HomePageLogada />} />
         <Route path="/administracao" element={<AdminPage />} />
         <Route path="/cadastramentodeusuario" element={<CadastramentoUsuarioPage />} />
         <Route path="/perfil" element={<EditarPerfil />} />
-        <Route path="*" element={<h1>404 Not Found</h1>} /> 
+        <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
     </Router>
   );

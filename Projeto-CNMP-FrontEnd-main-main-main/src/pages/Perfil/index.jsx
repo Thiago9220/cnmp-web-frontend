@@ -16,14 +16,12 @@ import { useNavigate } from 'react-router-dom';
 const EditarPerfil = () => {
   const navigate = useNavigate();
   const toast = useToast();
-  
-  // Estado para armazenar os dados do perfil
+
   const [perfil, setPerfil] = useState({
     nome: '',
     email: '',
   });
 
-  // Carrega os dados do usuário ao montar o componente
   useEffect(() => {
     const nome = localStorage.getItem('nomeUsuario');
     const email = localStorage.getItem('userEmail');
@@ -33,7 +31,6 @@ const EditarPerfil = () => {
     }
   }, []);
 
-  // Função para lidar com mudanças nos campos de entrada
   const handleChange = (e) => {
     const { name, value } = e.target;
     setPerfil({
@@ -42,9 +39,7 @@ const EditarPerfil = () => {
     });
   };
 
-  // Função para salvar as alterações
   const handleSave = () => {
-    // Atualiza o nome no localStorage
     localStorage.setItem('nomeUsuario', perfil.nome);
 
     toast({
@@ -55,7 +50,6 @@ const EditarPerfil = () => {
       isClosable: true,
     });
 
-    // Redireciona o usuário para a página principal
     navigate('/HomePageLogada');
   };
 

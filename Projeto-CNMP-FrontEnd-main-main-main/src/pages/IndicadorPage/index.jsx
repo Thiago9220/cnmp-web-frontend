@@ -1,4 +1,3 @@
-// IndicadorPage.js
 import React, { useEffect, useState } from 'react';
 import {
   Table,
@@ -83,7 +82,6 @@ export default function IndicadorPage() {
         periodicidadeColeta: 'Mensal',
         frequenciaMeta: 'Mensal',
       },
-      // Adicione mais itens conforme necessário
     ];
 
     setIndicadores(dadosIniciais);

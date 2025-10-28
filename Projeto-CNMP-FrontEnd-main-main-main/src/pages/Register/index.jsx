@@ -15,7 +15,7 @@ import {
   CloseButton,
   useToast
 } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 
 export default function RegisterScreen() {
@@ -35,7 +35,6 @@ export default function RegisterScreen() {
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    // Valida se todos os campos estão preenchidos
     if (!nome || !email || !password || !repeatPassword) {
       toast({
         title: 'Erro',
@@ -47,7 +46,6 @@ export default function RegisterScreen() {
       return;
     }
 
-    // Verificar se as senhas correspondem
     if (password !== repeatPassword) {
       toast({
         title: 'Erro',
@@ -60,7 +58,6 @@ export default function RegisterScreen() {
     }
 
     try {
-      // Fazer a requisição ao backend para registrar o usuário com perfil de gestor
       const response = await fetch('http://localhost:8000/usuarios/', {
         method: 'POST',
         headers: {
@@ -163,4 +160,3 @@ export default function RegisterScreen() {
     </Stack>
   );
 }
-
