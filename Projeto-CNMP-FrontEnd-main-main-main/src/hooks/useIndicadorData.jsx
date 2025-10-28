@@ -47,7 +47,7 @@ export function useIndicadorData(viewType) {
       ? initialStateTrimestral
       : viewType === 'semestral'
       ? initialStateSemestral
-      : initialStateAnual; // se for "anual" ou não se encaixar nos demais
+      : initialStateAnual;
 
   const [formData, setFormData] = useState(initialState);
 

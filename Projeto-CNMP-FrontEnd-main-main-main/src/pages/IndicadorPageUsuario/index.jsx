@@ -22,16 +22,16 @@ const IndicadoresPage = () => {
   const toast = useToast();
 
   const {
-    indicators,           // lista de indicadores disponíveis
-    selectedIndicator,    // indicador escolhido
-    setSelectedIndicator, // setter do indicador escolhido
+    indicators,
+    selectedIndicator,
+    setSelectedIndicator,
     meta,
     setMeta,
-    formData,             // dados do formulário (valores prescrito, finalizado etc.)
+    formData,
     setFormData,
-    handleInputChange,    // lida com alterações de input
+    handleInputChange,
     valorCalculado,
-    salvarDados           // função para salvar no localStorage (ou backend, caso adapte)
+    salvarDados
   } = useIndicadorData(viewType);
 
   const [modalMode, setModalMode] = useState('');

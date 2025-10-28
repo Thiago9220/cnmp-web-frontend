@@ -7,15 +7,15 @@ const getUserProfile = () => {
 };
 
 const PrivateRoute = ({ children, allowedRoles }) => {
-  const token = localStorage.getItem('token'); // Verifica se o usuário está logado
-  const userProfile = getUserProfile(); // Obtém o perfil do usuário
+  const token = localStorage.getItem('token');
+  const userProfile = getUserProfile();
 
   if (!token) {
     return <Navigate to="/login" />;
   }
 
   if (!allowedRoles.includes(userProfile)) {
-    return <Navigate to="/medicoes" />; // Redireciona o usuário para a página de medição de indicadores
+    return <Navigate to="/medicoes" />;
   }
 
   return children;

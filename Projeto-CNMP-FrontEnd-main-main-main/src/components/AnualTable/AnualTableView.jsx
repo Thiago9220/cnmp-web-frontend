@@ -218,7 +218,7 @@ const AnualTableView = ({
                   icon={<ViewIcon />}
                   aria-label="Visualizar Análise"
                   onClick={() => openViewModal(0)}
-                  isDisabled={!analiseValue} // Desabilita se não houver nada escrito
+                  isDisabled={!analiseValue}
                 />
               </Stack>
             </Td>

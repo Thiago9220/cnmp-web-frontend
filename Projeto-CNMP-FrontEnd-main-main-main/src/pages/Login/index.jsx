@@ -38,14 +38,14 @@ export default function LoginScreen() {
     try {
       const response = await axios.post('http://localhost:8000/login/', {
         email,
-        senha: password,  // Certifique-se de que o campo seja "senha" para corresponder ao backend
+        senha: password,
       });
 
       const { access_token, nome, perfil } = response.data;
 
       localStorage.setItem('token', access_token);
       localStorage.setItem('nomeUsuario', nome);
-      localStorage.setItem('perfilUsuario', perfil); // Armazena o perfil do usuário corretamente
+      localStorage.setItem('perfilUsuario', perfil);
 
       navigate('/HomePageLogada');
     } catch (error) {

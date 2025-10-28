@@ -5,18 +5,18 @@
 
 .container-login {
   width: 100%;
-  min-height: 100vh; /* Garante que o contêiner ocupe toda a altura da tela */
+  min-height: 100vh;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   padding: 15px;
-  background-color: #333; /* Fundo branco */
+  background-color: #333;
 }
 
 .wrap-login {
   width: 390px;
-  background-color: #333; /* Cor de fundo para o formulário */
+  background-color: #333;
   border-radius: 10px;
   overflow: hidden;
   padding: 50px 55px 20px 40px;

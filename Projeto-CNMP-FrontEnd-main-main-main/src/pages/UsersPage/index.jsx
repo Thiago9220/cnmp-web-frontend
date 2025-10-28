@@ -1,5 +1,5 @@
 import React from 'react';
-import './usersPage.css'; // Estilo específico para a página de usuários
+import './usersPage.css';
 
 function UsersPage() {
   return (

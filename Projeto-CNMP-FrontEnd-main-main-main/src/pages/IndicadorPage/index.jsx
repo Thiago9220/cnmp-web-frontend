@@ -49,7 +49,7 @@ export default function IndicadorPage() {
   const [selectedIndicators, setSelectedIndicators] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [indicadorSelecionado, setIndicadorSelecionado] = useState(null);
-  const [isViewMode, setIsViewMode] = useState(false); // Define o modo de visualização
+  const [isViewMode, setIsViewMode] = useState(false);
   const toast = useToast();
 
   useEffect(() => {
@@ -123,13 +123,13 @@ export default function IndicadorPage() {
 
   const handleViewClick = (indicador) => {
     setIndicadorSelecionado(indicador);
-    setIsViewMode(true); // Define o modal como modo de visualização
+    setIsViewMode(true);
     setIsModalOpen(true);
   };
 
   const handleEditClick = (indicador) => {
     setIndicadorSelecionado(indicador);
-    setIsViewMode(false); // Define o modal como modo de edição
+    setIsViewMode(false);
     setIsModalOpen(true);
   };
 

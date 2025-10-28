@@ -25,8 +25,8 @@ function CadastramentoUsuarioPage() {
   const navigate = useNavigate();
   const toast = useToast();
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
-  const [password, setPassword] = useState(''); // Armazena a senha gerada
-  const [isSubmitting, setIsSubmitting] = useState(false); // Estado de carregamento
+  const [password, setPassword] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const generatePassword = () => {
     const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -54,7 +54,7 @@ function CadastramentoUsuarioPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true); // Ativa o estado de carregamento
+    setIsSubmitting(true);
 
     const generatedPassword = generatePassword();
     setPassword(generatedPassword);
@@ -65,7 +65,7 @@ function CadastramentoUsuarioPage() {
       email: e.target.email.value,
       perfil: e.target.perfil.value,
       areaResponsavel: e.target.areaResponsavel.value,
-      senha: generatedPassword // Enviar a senha gerada automaticamente
+      senha: generatedPassword
     };
 
     if (!formData.nome || !formData.email || !formData.areaResponsavel || !formData.perfil) {
@@ -118,13 +118,13 @@ function CadastramentoUsuarioPage() {
         isClosable: true,
       });
     } finally {
-      setIsSubmitting(false); // Desativa o estado de carregamento
+      setIsSubmitting(false);
     }
   };
 
   const handleCloseModal = () => {
     setIsPasswordModalOpen(false);
-    navigate('/medicoes'); // Redirecionar o usuário para a página de medições de indicadores
+    navigate('/medicoes');
   };
 
   const copyPasswordToClipboard = () => {
@@ -189,7 +189,7 @@ function CadastramentoUsuarioPage() {
                 background={'red.600'}
                 type="submit"
                 width="full"
-                isLoading={isSubmitting} // Adiciona o estado de carregamento
+                isLoading={isSubmitting}
               >
                 Cadastrar
               </Button>

@@ -40,7 +40,7 @@ export default function RegisterScreen() {
         title: 'Erro',
         description: 'Por favor, preencha todos os campos.',
         status: 'error',
-        duration: 3000,  // Tempo ajustado para um feedback mais rápido
+        duration: 3000,
         isClosable: true,
       });
       return;
@@ -67,7 +67,7 @@ export default function RegisterScreen() {
           nome: nome,
           email: email,
           senha: password,
-          perfil: 'gestor' // Adiciona o perfil como gestor/admin automaticamente
+          perfil: 'gestor'
         }),
       });
 
@@ -80,7 +80,7 @@ export default function RegisterScreen() {
           duration: 3000,
           isClosable: true,
         });
-        navigate('/Login'); // Redireciona para a página de login
+        navigate('/Login');
       } else {
         const errorData = await response.json();
         toast({
