@@ -58,22 +58,25 @@ export default function IndicadorPage() {
       setNomeUsuario(nome);
     }
 
-    const dadosIniciais = [
+    const modeloIndicadores = [
       {
+        id: 'modelo-biblio-i1',
         codigo: 'BIBLIO I.1',
-        nomeIndicador: 'Quantidade de Empréstimos',
-        area: 'BIBLIO Biblioteca',
+        codigoIndicador: 'BIBLIO I.1',
+        nomeIndicador: 'Quantidade de Emprestimos',
+        area: 'Biblioteca',
+        areaResponsavel: 'Biblioteca',
         unidadeMedida: 'Qtd.',
         classificador: 'Monitoramento Operacional',
-        responsavel: 'Igor Guevara',
-        objetivoEstrategico: 'Aumentar o número de empréstimos',
+        responsavel: 'Equipe Biblioteca',
+        objetivoEstrategico: 'Aumentar o numero de emprestimos',
         perspectivaEstrategica: 'Crescimento',
-        descricaoObjetivoEstrategico: 'Melhorar o engajamento dos usuários',
-        descricaoIndicador: 'Número total de empréstimos realizados',
-        finalidadeIndicador: 'Medir a utilização da biblioteca',
+        descricaoObjetivoEstrategico: 'Melhorar o engajamento dos usuarios',
+        descricaoIndicador: 'Numero total de emprestimos realizados',
+        finalidadeIndicador: 'Medir a utilizacao da biblioteca',
         dimensaoDesempenho: 'Efetividade (E1)',
-        formula: 'Total de empréstimos no período',
-        fonteFormaColeta: 'Sistema de empréstimos',
+        formula: 'Total de emprestimos no periodo',
+        fonteFormaColeta: 'Sistema de emprestimos',
         pesoIndicador: '1',
         interpretacaoIndicador: 'Valores maiores indicam melhor desempenho',
         meta: '500',
@@ -84,9 +87,54 @@ export default function IndicadorPage() {
       },
     ];
 
-    setIndicadores(dadosIniciais);
-    setDadosFiltrados(dadosIniciais);
-  }, []);
+    const normalizarIndicador = (item) => {
+      const codigo = item.codigo ?? item.codigoIndicador ?? '';
+      const areaResponsavel = item.areaResponsavel ?? item.area ?? '';
+      const identificador =
+        item.id !== undefined && item.id !== null && item.id !== ''
+          ? item.id
+          : codigo || `indicador-${Math.random().toString(36).slice(2)}`;
+      return {
+        ...item,
+        id: String(identificador),
+        codigo,
+        codigoIndicador: item.codigoIndicador ?? codigo,
+        area: item.area ?? areaResponsavel,
+        areaResponsavel,
+        responsavel: item.responsavel ?? areaResponsavel,
+        classificador: item.classificador ?? item.dimensaoDesempenho ?? '',
+      };
+    };
+
+    const carregarIndicadores = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/indicadores/');
+        if (!response.ok) {
+          throw new Error('Falha ao buscar indicadores');
+        }
+
+        const data = await response.json();
+        const lista = Array.isArray(data) ? data : [];
+        const normalizados = lista.map(normalizarIndicador);
+        setIndicadores(normalizados);
+        setDadosFiltrados(normalizados);
+      } catch (error) {
+        console.error('Erro ao carregar indicadores:', error);
+        toast({
+          title: 'Erro',
+          description: 'Nao foi possivel carregar os indicadores.',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        });
+        const normalizadosModelo = modeloIndicadores.map(normalizarIndicador);
+        setIndicadores(normalizadosModelo);
+        setDadosFiltrados(normalizadosModelo);
+      }
+    };
+
+    carregarIndicadores();
+  }, [toast]);
 
   const handleFiltroChange = (e) => {
     const { name, value } = e.target;
@@ -140,9 +188,18 @@ export default function IndicadorPage() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setIndicadorSelecionado({
-      ...indicadorSelecionado,
-      [name]: value,
+    setIndicadorSelecionado((prev) => {
+      if (!prev) {
+        return prev;
+      }
+      const atualizado = { ...prev, [name]: value };
+      if (name === 'codigo') {
+        atualizado.codigoIndicador = value;
+      }
+      if (name === 'area') {
+        atualizado.areaResponsavel = value;
+      }
+      return atualizado;
     });
   };
 
@@ -216,10 +273,20 @@ export default function IndicadorPage() {
               <Th>
                 <Checkbox
                   colorScheme="green"
-                  isChecked={selectedIndicators.length === dadosFiltrados.length && dadosFiltrados.length > 0}
-                  isIndeterminate={selectedIndicators.length > 0 && selectedIndicators.length < dadosFiltrados.length}
+                  isChecked={
+                    selectedIndicators.length === dadosFiltrados.length &&
+                    dadosFiltrados.length > 0
+                  }
+                  isIndeterminate={
+                    selectedIndicators.length > 0 &&
+                    selectedIndicators.length < dadosFiltrados.length
+                  }
                   onChange={(e) => {
-                    setSelectedIndicators(e.target.checked ? dadosFiltrados.map((item) => item.codigo) : []);
+                    setSelectedIndicators(
+                      e.target.checked
+                        ? dadosFiltrados.map((item) => String(item.id))
+                        : []
+                    );
                   }}
                 />
               </Th>
@@ -323,12 +390,12 @@ export default function IndicadorPage() {
                 <Td>
                   <Checkbox
                     colorScheme="green"
-                    isChecked={selectedIndicators.includes(item.codigo)}
+                    isChecked={selectedIndicators.includes(String(item.id))}
                     onChange={() => {
                       setSelectedIndicators((prevSelected) =>
-                        prevSelected.includes(item.codigo)
-                          ? prevSelected.filter((codigo) => codigo !== item.codigo)
-                          : [...prevSelected, item.codigo]
+                        prevSelected.includes(String(item.id))
+                          ? prevSelected.filter((id) => id !== String(item.id))
+                          : [...prevSelected, String(item.id)]
                       );
                     }}
                   />

@@ -3,6 +3,14 @@ import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
+const filtrarSelecionados = (indicadores, selecionados) => {
+  const idsSelecionados = new Set(selecionados.map((valor) => String(valor)));
+
+  return indicadores.filter((item) =>
+    idsSelecionados.has(String(item.id ?? item.codigo ?? item.codigoIndicador))
+  );
+};
+
 export const exportarSelecionadosParaPDF = (selectedIndicators, indicadores, toast) => {
   if (selectedIndicators.length === 0) {
     toast({
@@ -16,8 +24,7 @@ export const exportarSelecionadosParaPDF = (selectedIndicators, indicadores, toa
   }
 
   const doc = new jsPDF();
-
-  const dados = indicadores.filter((item) => selectedIndicators.includes(item.codigo));
+  const dados = filtrarSelecionados(indicadores, selectedIndicators);
 
   dados.forEach((item, index) => {
     if (index > 0) {
@@ -25,29 +32,29 @@ export const exportarSelecionadosParaPDF = (selectedIndicators, indicadores, toa
     }
 
     doc.setFontSize(12);
-    doc.text(`Código do Indicador: ${item.codigo}`, 10, 10);
+    doc.text(`Codigo do Indicador: ${item.codigo ?? item.codigoIndicador}`, 10, 10);
 
     autoTable(doc, {
       startY: 20,
       body: [
-        ['Nome do Indicador', item.nomeIndicador],
-        ['Objetivo Estratégico Associado', item.objetivoEstrategico],
-        ['Perspectiva Estratégica', item.perspectivaEstrategica],
-        ['Descrição do Objetivo Estratégico', item.descricaoObjetivoEstrategico || ''],
-        ['Descrição do Indicador', item.descricaoIndicador || ''],
+        ['Nome do Indicador', item.nomeIndicador || ''],
+        ['Objetivo Estrategico Associado', item.objetivoEstrategico || ''],
+        ['Perspectiva Estrategica', item.perspectivaEstrategica || ''],
+        ['Descricao do Objetivo Estrategico', item.descricaoObjetivoEstrategico || ''],
+        ['Descricao do Indicador', item.descricaoIndicador || ''],
         ['Finalidade do Indicador', item.finalidadeIndicador || ''],
-        ['Dimensão do Desempenho', item.dimensaoDesempenho || ''],
-        ['Fórmula', item.formula || ''],
+        ['Dimensao do Desempenho', item.dimensaoDesempenho || ''],
+        ['Formula', item.formula || ''],
         ['Fonte/Forma de Coleta dos Dados', item.fonteFormaColeta || ''],
         ['Peso do Indicador', item.pesoIndicador || ''],
-        ['Interpretação do Indicador/Recomendações', item.interpretacaoIndicador || ''],
-        ['Área Responsável', item.area || ''],
+        ['Interpretacao do Indicador/Recomendacoes', item.interpretacaoIndicador || ''],
+        ['Area Responsavel', item.area ?? item.areaResponsavel ?? ''],
         ['Meta', item.meta || ''],
-        ['Tipos de Acumulação', item.tiposAcumulacao || ''],
+        ['Tipos de Acumulacao', item.tiposAcumulacao || ''],
         ['Polaridade', item.polaridade || ''],
         ['Periodicidade de Coleta', item.periodicidadeColeta || ''],
-        ['Frequência da Meta', item.frequenciaMeta || ''],
-        ['Unidade de Medida', item.unidadeMedida || '']
+        ['Frequencia da Meta', item.frequenciaMeta || ''],
+        ['Unidade de Medida', item.unidadeMedida || ''],
       ],
       theme: 'striped',
       headStyles: { fillColor: [41, 128, 185] },
@@ -71,29 +78,27 @@ export const exportarSelecionadosParaExcel = (selectedIndicators, indicadores, t
     return;
   }
 
-  const dados = indicadores
-    .filter((item) => selectedIndicators.includes(item.codigo))
-    .map((item) => ({
-      'Código do Indicador': item.codigo,
-      'Nome do Indicador': item.nomeIndicador,
-      'Objetivo Estratégico Associado': item.objetivoEstrategico,
-      'Perspectiva Estratégica': item.perspectivaEstrategica,
-      'Descrição do Objetivo Estratégico': item.descricaoObjetivoEstrategico,
-      'Descrição do Indicador': item.descricaoIndicador,
-      'Finalidade do Indicador': item.finalidadeIndicador,
-      'Dimensão do Desempenho': item.dimensaoDesempenho,
-      'Fórmula': item.formula,
-      'Fonte/Forma de Coleta dos Dados': item.fonteFormaColeta,
-      'Peso do Indicador': item.pesoIndicador,
-      'Interpretação do Indicador/Recomendações': item.interpretacaoIndicador,
-      'Área Responsável': item.area,
-      'Meta': item.meta,
-      'Tipos de Acumulação': item.tiposAcumulacao,
-      'Polaridade': item.polaridade,
-      'Periodicidade de Coleta': item.periodicidadeColeta,
-      'Frequência da Meta': item.frequenciaMeta,
-      'Unidade de Medida': item.unidadeMedida,
-    }));
+  const dados = filtrarSelecionados(indicadores, selectedIndicators).map((item) => ({
+    'Codigo do Indicador': item.codigo ?? item.codigoIndicador,
+    'Nome do Indicador': item.nomeIndicador || '',
+    'Objetivo Estrategico Associado': item.objetivoEstrategico || '',
+    'Perspectiva Estrategica': item.perspectivaEstrategica || '',
+    'Descricao do Objetivo Estrategico': item.descricaoObjetivoEstrategico || '',
+    'Descricao do Indicador': item.descricaoIndicador || '',
+    'Finalidade do Indicador': item.finalidadeIndicador || '',
+    'Dimensao do Desempenho': item.dimensaoDesempenho || '',
+    Formula: item.formula || '',
+    'Fonte/Forma de Coleta dos Dados': item.fonteFormaColeta || '',
+    'Peso do Indicador': item.pesoIndicador || '',
+    'Interpretacao do Indicador/Recomendacoes': item.interpretacaoIndicador || '',
+    'Area Responsavel': item.area ?? item.areaResponsavel ?? '',
+    Meta: item.meta || '',
+    'Tipos de Acumulacao': item.tiposAcumulacao || '',
+    Polaridade: item.polaridade || '',
+    'Periodicidade de Coleta': item.periodicidadeColeta || '',
+    'Frequencia da Meta': item.frequenciaMeta || '',
+    'Unidade de Medida': item.unidadeMedida || '',
+  }));
 
   const ws = XLSX.utils.json_to_sheet(dados);
   const wb = XLSX.utils.book_new();
